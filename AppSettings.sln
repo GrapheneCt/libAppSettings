@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1525
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libAppSettings", "AppSettings\AppSettings.vcxproj", "{7ECABF42-AC7D-4B8C-A5B3-8349746A6D3D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample", "sample\sample.vcxproj", "{EBE09354-473A-489D-BBF2-78F6D067A5E4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7ECABF42-AC7D-4B8C-A5B3-8349746A6D3D} = {7ECABF42-AC7D-4B8C-A5B3-8349746A6D3D}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|PSVita = Debug|PSVita
+		Release|PSVita = Release|PSVita
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7ECABF42-AC7D-4B8C-A5B3-8349746A6D3D}.Debug|PSVita.ActiveCfg = Debug|PSVita
+		{7ECABF42-AC7D-4B8C-A5B3-8349746A6D3D}.Debug|PSVita.Build.0 = Debug|PSVita
+		{7ECABF42-AC7D-4B8C-A5B3-8349746A6D3D}.Release|PSVita.ActiveCfg = Release|PSVita
+		{7ECABF42-AC7D-4B8C-A5B3-8349746A6D3D}.Release|PSVita.Build.0 = Release|PSVita
+		{EBE09354-473A-489D-BBF2-78F6D067A5E4}.Debug|PSVita.ActiveCfg = Debug|PSVita
+		{EBE09354-473A-489D-BBF2-78F6D067A5E4}.Debug|PSVita.Build.0 = Debug|PSVita
+		{EBE09354-473A-489D-BBF2-78F6D067A5E4}.Release|PSVita.ActiveCfg = Release|PSVita
+		{EBE09354-473A-489D-BBF2-78F6D067A5E4}.Release|PSVita.Build.0 = Release|PSVita
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1F61F31B-2A6B-4E9C-A040-8EE1CA627C82}
+	EndGlobalSection
+EndGlobal
