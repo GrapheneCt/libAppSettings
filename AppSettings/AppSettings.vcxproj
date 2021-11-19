@@ -62,11 +62,14 @@
       <AdditionalOptions>--no-standard-libraries --no-required-files</AdditionalOptions>
       <AdditionalLibraryDirectories>$(SCE_PSP2_SDK_DIR)\target\lib\vdsuite;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>"$(SCE_PSP2_SDK_DIR)\host_tools\build\bin\vdsuite-libgen.exe" --output-kind VitasdkStub "$(ProjectDir)vitasdk_exports.yml" "$(OutDir)libAppSettings_stub_vitasdk.a"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|PSVita'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <OptimizationLevel>Level2</OptimizationLevel>
+      <OptimizationLevel>Level3</OptimizationLevel>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SCE_PSP2_SDK_DIR)\target\include\vdsuite\user;$(SCE_PSP2_SDK_DIR)\target\include\vdsuite\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -74,7 +77,11 @@
       <AdditionalDependencies>-lsnc;-lScePafTopLevel_stub_weak;-lScePafThread_stub_weak;-lScePafStdc_stub_weak;-lScePafMisc_stub_weak;-lScePafCommon_stub_weak;-lScePafGraphics_stub_weak;-lScePafResource_stub_weak;-lSceLibKernel_stub;-lSceSysmodule_stub;-lSceThreadmgr_stub;-lSceProcessmgr_stub;-lSceAppSettings_stub_weak;-lSceDbg_stub;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>--no-standard-libraries --no-required-files</AdditionalOptions>
       <AdditionalLibraryDirectories>$(SCE_PSP2_SDK_DIR)\target\lib\vdsuite;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <InfoStripping>StripSymsAndDebug</InfoStripping>
     </Link>
+    <PostBuildEvent>
+      <Command>"$(SCE_PSP2_SDK_DIR)\host_tools\build\bin\vdsuite-libgen.exe" --output-kind VitasdkStub "$(ProjectDir)vitasdk_exports.yml" "$(OutDir)libAppSettings_stub_vitasdk.a"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Condition="'$(ConfigurationType)' == 'Makefile' and Exists('$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets')" Project="$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

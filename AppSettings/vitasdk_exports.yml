@@ -1,0 +1,18 @@
+version: 0x2
+firmware: 3.60
+modules:
+  libAppSettings:
+    nid: 0
+    libraries:
+      libAppSettings:
+        nid: 0xD62F5A31
+        kernel: false
+        functions:
+          appSettingsGetInt: 0x49AC2221
+          appSettingsInit: 0xD84A114A
+          appSettingsOpen: 0xBD7390A6
+          appSettingsReset: 0x9785A876
+          appSettingsSetInt: 0x68D7DF5A
+          appSettingsTerm: 0x2BEF39B1
+          appSettingsWaitEnd: 0x4D44580D
+
