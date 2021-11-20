@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kernel.h>
+#include <common_dialog.h>
 
 #include "app_settings_internal.h"
 
@@ -11,3 +12,5 @@ int _appSettingsSetInt(const char *key, int value);
 int _appSettingsOpen();
 int _appSettingsReset();
 int _appSettingsWaitEnd();
+int _appSettingsUpdate(SceCommonDialogUpdateParam *updateParam);
+int _appSettingsIsOpened();

@@ -58,7 +58,7 @@
       <AdditionalIncludeDirectories>$(SCE_PSP2_SDK_DIR)\target\include\vdsuite\user;$(SCE_PSP2_SDK_DIR)\target\include\vdsuite\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>-lsnc;-lScePafTopLevel_stub_weak;-lScePafThread_stub_weak;-lScePafStdc_stub_weak;-lScePafMisc_stub_weak;-lScePafCommon_stub_weak;-lScePafGraphics_stub_weak;-lScePafResource_stub_weak;-lSceLibKernel_stub;-lSceSysmodule_stub;-lSceThreadmgr_stub;-lSceProcessmgr_stub;-lSceAppSettings_stub_weak;-lSceDbg_stub;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>-lsnc;-lScePafTopLevel_stub_weak;-lScePafThread_stub_weak;-lScePafStdc_stub_weak;-lScePafMisc_stub_weak;-lScePafCommon_stub_weak;-lScePafGraphics_stub_weak;-lScePafResource_stub_weak;-lSceLibKernel_stub;-lSceSysmodule_stub;-lSceThreadmgr_stub;-lSceProcessmgr_stub;-lSceAppSettings_stub_weak;-lSceModulemgr_stub;-lSceGxmInternal_stub;-lSceDbg_stub;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>--no-standard-libraries --no-required-files</AdditionalOptions>
       <AdditionalLibraryDirectories>$(SCE_PSP2_SDK_DIR)\target\lib\vdsuite;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
@@ -74,7 +74,7 @@
       <AdditionalIncludeDirectories>$(SCE_PSP2_SDK_DIR)\target\include\vdsuite\user;$(SCE_PSP2_SDK_DIR)\target\include\vdsuite\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>-lsnc;-lScePafTopLevel_stub_weak;-lScePafThread_stub_weak;-lScePafStdc_stub_weak;-lScePafMisc_stub_weak;-lScePafCommon_stub_weak;-lScePafGraphics_stub_weak;-lScePafResource_stub_weak;-lSceLibKernel_stub;-lSceSysmodule_stub;-lSceThreadmgr_stub;-lSceProcessmgr_stub;-lSceAppSettings_stub_weak;-lSceDbg_stub;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>-lsnc;-lScePafTopLevel_stub_weak;-lScePafThread_stub_weak;-lScePafStdc_stub_weak;-lScePafMisc_stub_weak;-lScePafCommon_stub_weak;-lScePafGraphics_stub_weak;-lScePafResource_stub_weak;-lSceLibKernel_stub;-lSceSysmodule_stub;-lSceThreadmgr_stub;-lSceProcessmgr_stub;-lSceAppSettings_stub_weak;-lSceModulemgr_stub;-lSceGxmInternal_stub;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>--no-standard-libraries --no-required-files</AdditionalOptions>
       <AdditionalLibraryDirectories>$(SCE_PSP2_SDK_DIR)\target\lib\vdsuite;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <InfoStripping>StripSymsAndDebug</InfoStripping>

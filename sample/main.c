@@ -36,6 +36,7 @@ int main()
 	}
 
 	AppSettingsInitParam iparam;
+	iparam.renderingMode = APP_SETTINGS_RENDERING_MODE_STANDALONE;
 	iparam.configFilePath = "app0:settings.xml";
 	iparam.iniSafememMaxSize = 0x1000;
 	iparam.iniSafememOffset = 0;

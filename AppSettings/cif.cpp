@@ -23,6 +23,11 @@ extern "C" {
 		return _appSettingsInit(pInitParam);
 	}
 
+	__declspec (dllexport) int appSettingsUpdate(SceCommonDialogUpdateParam *updateParam)
+	{
+		return _appSettingsUpdate(updateParam);
+	}
+
 	__declspec (dllexport) int appSettingsTerm()
 	{
 		return _appSettingsTerm();
@@ -51,5 +56,10 @@ extern "C" {
 	__declspec (dllexport) int appSettingsWaitEnd()
 	{
 		return _appSettingsWaitEnd();
+	}
+
+	__declspec (dllexport) int appSettingsIsOpened()
+	{
+		return _appSettingsIsOpened();
 	}
 }

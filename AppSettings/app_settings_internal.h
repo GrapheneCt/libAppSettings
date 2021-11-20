@@ -11,5 +11,7 @@ extern "C" {
 	__declspec (dllexport) int appSettingsOpen();
 	__declspec (dllexport) int appSettingsReset();
 	__declspec (dllexport) int appSettingsWaitEnd();
+	__declspec (dllexport) int appSettingsUpdate(SceCommonDialogUpdateParam *updateParam);
+	__declspec (dllexport) int appSettingsIsOpened();
 
 }

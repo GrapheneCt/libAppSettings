@@ -3,7 +3,8 @@
 #include <appmgr.h>
 #include <paf.h>
 #include <shellsvc.h>
-#include <taihen.h>
+#include <common_dialog.h>
+#include <gxm.h>
 
 #ifdef _DEBUG
 #include <libdbg.h>
@@ -19,6 +20,9 @@
 extern "C" {
 
 	int sceKernelIsGameBudget(void);
+	int sceGxmIsWithinScene(void);
+	int sceKernelIsCDialogAvailable();
+	int sceKernelCDialogSetLeaseLimit(int);
 
 }
 
@@ -54,10 +58,24 @@ static int loadPafPrx()
 	ScePafInit init_param;
 	SceSysmoduleOpt sysmodule_opt;
 
-	init_param.global_heap_size = 3 * 1024 * 1024;
+	if (!sceKernelIsGameBudget())
+		init_param.global_heap_size = 3 * 1024 * 1024 + 256 * 1024;
+	else
+		init_param.global_heap_size = 2 * 1024 * 1024 + 256 * 1024;
 	init_param.a2 = 0x0000EA60;
 	init_param.a3 = 0x00040000;
+
 	init_param.cdlg_mode = 0;
+
+	if (sceKernelIsGameBudget()) {
+		if (s_params.renderingMode == APP_SETTINGS_RENDERING_MODE_COMMON_DIALOG) {
+			if (sceKernelIsCDialogAvailable())
+				init_param.cdlg_mode = 1;
+			else
+				return -1;
+		}
+	}
+
 	init_param.heap_opt_param1 = 0;
 	init_param.heap_opt_param2 = 0;
 
@@ -87,6 +105,8 @@ int _appSettingsThread(unsigned int argSize, void *pArgBlock)
 	Framework::PluginInitParam *pluginParam;
 	AppSettings::InitParam sparam;
 
+	sceKernelCDialogSetLeaseLimit(0);
+
 	if (sceSysmoduleIsLoadedInternal(SCE_SYSMODULE_INTERNAL_PAF)) {
 		res = loadPafPrx();
 		if (res != SCE_OK) {
@@ -112,17 +132,32 @@ int _appSettingsThread(unsigned int argSize, void *pArgBlock)
 	}
 
 	fwParam = new Framework::InitParam();
-
 	fwParam->LoadDefaultParams();
 
-	if (sceKernelIsGameBudget())
-		fwParam->applicationMode = Framework::Mode_ApplicationDefault;
-	else
-		fwParam->applicationMode = Framework::Mode_ApplicationA;
+	if (sceKernelIsGameBudget()) {
+		if (s_params.renderingMode == APP_SETTINGS_RENDERING_MODE_STANDALONE)
+			fwParam->applicationMode = Framework::Mode_ApplicationDefault;
+		else if (s_params.renderingMode == APP_SETTINGS_RENDERING_MODE_COMMON_DIALOG)
+			fwParam->applicationMode = Framework::Mode_ApplicationD;
+		else {
+			res = -1;
+			goto return_with_result;
+		}
+	}
+	else {
+		if (s_params.renderingMode == APP_SETTINGS_RENDERING_MODE_STANDALONE)
+			fwParam->applicationMode = Framework::Mode_ApplicationA;
+		else {
+			res = -1;
+			goto return_with_result;
+		}
+	}
 
-	fwParam->defaultSurfacePoolSize = 4 * 1024 * 1024;
-	fwParam->textSurfaceCacheSize = 1 * 1024 * 1024;
+	fwParam->gxmRingBufferSize = 512 * 1024;
+	fwParam->defaultSurfacePoolSize = 3 * 1024 * 1024;
 	fwParam->graphMemSystemHeapSize = 512 * 1024;
+	fwParam->textSurfaceCacheSize = 512 * 1024;
+	fwParam->fontRasterizerHeapSize = 1 * 1024 * 1024;
 
 	s_fw = new Framework(fwParam);
 	s_fw->LoadCommonResource();
@@ -184,12 +219,54 @@ int _appSettingsThread(unsigned int argSize, void *pArgBlock)
 	if (paf_sysmoduleLoadedLocally)
 		sceSysmoduleUnloadModuleInternal(SCE_SYSMODULE_INTERNAL_PAF);
 
+	sceKernelCDialogSetLeaseLimit(1);
+
 	return sceKernelExitDeleteThread(0);
 
 return_with_result:
+
+	if (cdlg_sysmoduleLoadedLocally)
+		sceSysmoduleUnloadModuleInternal(SCE_SYSMODULE_INTERNAL_COMMON_GUI_DIALOG);
+	if (ini_sysmoduleLoadedLocally)
+		sceSysmoduleUnloadModuleInternal(SCE_SYSMODULE_INTERNAL_INI_FILE_PROCESSOR);
+	if (bxce_sysmoduleLoadedLocally)
+		sceSysmoduleUnloadModuleInternal(SCE_SYSMODULE_INTERNAL_BXCE);
+	if (paf_sysmoduleLoadedLocally)
+		sceSysmoduleUnloadModuleInternal(SCE_SYSMODULE_INTERNAL_PAF);
+
+	sceKernelCDialogSetLeaseLimit(1);
+
 	s_error = res;
 	sceKernelSetEventFlag(s_appSetThrdOpEvf, 1);
+
 	return sceKernelExitDeleteThread(0);
+}
+
+int _appSettingsUpdate(SceCommonDialogUpdateParam *updateParam)
+{
+	Framework::RenderSurfaceParam param;
+
+	if (!s_isOpened || s_params.renderingMode != APP_SETTINGS_RENDERING_MODE_COMMON_DIALOG)
+		return SCE_COMMON_DIALOG_ERROR_NOT_IN_USE;
+
+	if (!updateParam)
+		return SCE_COMMON_DIALOG_ERROR_NULL;
+
+	if (sceGxmIsWithinScene())
+		return SCE_COMMON_DIALOG_ERROR_WITHIN_SCENE;
+
+	param.colorSurfaceData = updateParam->renderTarget.colorSurfaceData;
+	param.colorFormat = updateParam->renderTarget.colorFormat;
+	param.surfaceType = updateParam->renderTarget.surfaceType;
+	param.width = updateParam->renderTarget.width;
+	param.height = updateParam->renderTarget.height;
+	param.strideInPixels = updateParam->renderTarget.strideInPixels;
+	param.displaySyncObject = updateParam->displaySyncObject;
+	param.unk_18 = 0;
+
+	s_fw->SetRenderTarget(&param);
+
+	return SCE_OK;
 }
 
 int _appSettingsInit(AppSettingsInitParam *pInitParam)
@@ -386,4 +463,9 @@ int _appSettingsWaitEnd()
 	sceKernelWaitEventFlag(s_appSetThrdOpEvf, 2, SCE_KERNEL_EVF_WAITMODE_AND | SCE_KERNEL_EVF_WAITMODE_CLEAR_PAT, SCE_NULL, SCE_NULL);
 
 	return SCE_OK;
+}
+
+int _appSettingsIsOpened()
+{
+	return s_isOpened;
 }
