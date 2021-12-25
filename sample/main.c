@@ -1,6 +1,12 @@
-#include <kernel.h>
 #include <stddef.h>
 #include <stdio.h>
+
+#ifdef _SCE_HOST_COMPILER_SNC
+#include <kernel.h>
+#else
+#include <psp2/kernel/modulemgr.h>
+#include <psp2/gxt.h> // For SCE_OK. Why is SCE_OK there? Don't ask me...
+#endif
 
 #include "../AppSettings/app_settings.h"
 
